@@ -42,6 +42,10 @@
       alphaSpan.textContent = event.alpha.toFixed(2);
       betaSpan.textContent = event.beta.toFixed(2);
       gammaSpan.textContent = event.gamma.toFixed(2);
+
+      if(event.alpha.toFixed(2)<1){
+        document.style.background = "red";
+      }
     }
 
     function enableOrientation() {
@@ -70,6 +74,8 @@
     } else {
       enableOrientation(); // Abilita subito su Android
     }
+
+    
   </script>
 
 </body>
