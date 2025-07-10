@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Giroscopio</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2em;
+      background: #f0f0f0;
+    }
+    h1 {
+      margin-bottom: 1em;
+    }
+    .data {
+      font-size: 1.5em;
+      margin: 0.5em 0;
+    }
+    button {
+      font-size: 1em;
+      padding: 0.5em 1em;
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Dati Giroscopio</h1>
+  <div class="data">Alpha (Z): <span id="alpha">-</span>°</div>
+  <div class="data">Beta (X): <span id="beta">-</span>°</div>
+  <div class="data">Gamma (Y): <span id="gamma">-</span>°</div>
+  <button id="enableBtn" style="display:none;">Abilita sensori</button>
+
+  <script>
+    const alphaSpan = document.getElementById('alpha');
+    const betaSpan = document.getElementById('beta');
+    const gammaSpan = document.getElementById('gamma');
+    const enableBtn = document.getElementById('enableBtn');
+
+    function handleOrientation(event) {
+      alphaSpan.textContent = event.alpha.toFixed(2);
+      betaSpan.textContent = event.beta.toFixed(2);
+      gammaSpan.textContent = event.gamma.toFixed(2);
+    }
+
+    function enableOrientation() {
+      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        // iOS
+        DeviceOrientationEvent.requestPermission()
+          .then(response => {
+            if (response === 'granted') {
+              window.addEventListener('deviceorientation', handleOrientation);
+              enableBtn.style.display = 'none';
+            } else {
+              alert('Permesso negato.');
+            }
+          })
+          .catch(console.error);
+      } else {
+        // Android / Desktop
+        window.addEventListener('deviceorientation', handleOrientation);
+      }
+    }
+
+    // Mostra il bottone solo su iOS
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      enableBtn.style.display = 'inline-block';
+      enableBtn.addEventListener('click', enableOrientation);
+    } else {
+      enableOrientation(); // Abilita subito su Android
+    }
+  </script>
+
+</body>
+</html>
